@@ -3,7 +3,7 @@
 source ~/.dotfiles/values
 
 # Usage:
-# curl -fsSL https://{link_to_repo}/etc/install | bash
+# curl -fsSL https://<<:REPO_ADDR>>/etc/install | bash
 
 cat <<EOF
    @skaro94's              ███████╗██╗██╗     ███████╗███████╗

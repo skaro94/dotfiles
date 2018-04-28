@@ -85,3 +85,6 @@
 	# Enable HTTP(S) auth credential caching
 	# for 60 seconds (requires git 1.7.9+)
 	helper = cache --timeout 60
+[user]
+	email = fernwehtilldawn@gmail.com
+	name = Jiwan Chung

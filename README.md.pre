@@ -11,13 +11,13 @@ Installation
 One-liner (if, you trust):
 
 ```bash
-curl -fsSL https://{link_to_repo}/etc/install | bash
+curl -fsSL https://<<:REPO_ADDR>>/etc/install | bash
 ```
 
 An alternative:
 
 ```bash
-git clone --recursive https://github.com/skaro94/dotfiles.git ~/.dotfiles
+git clone --recursive https://github.com/<<:USER_NAME>>/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && python install.py
 ```
 <!--
@@ -46,11 +46,11 @@ the task definition lies on the top of the script file.
 Some Handy URLs
 ---------------
 
-Every file is accessible through `{link_to_repo}` (via `curl -L` or `wget`), e.g.
+Every file is accessible through `<<:REPO_ADDR>>` (via `curl -L` or `wget`), e.g.
 
-* https://{link_to_repo}/vimrc
-* https://{link_to_repo}/vimrc?raw=true
-* https://{link_to_repo}/bin/tb
+* https://<<:REPO_ADDR>>/vimrc
+* https://<<:REPO_ADDR>>/vimrc?raw=true
+* https://<<:REPO_ADDR>>/bin/tb
 
 
 Troubleshooting
@@ -60,5 +60,5 @@ Troubleshooting
 * Does vim color look weird (e.g. black-and-white)? Check your terminal emulator supports [24-bit color](https://github.com/wookayin/dotfiles/pull/9).
 * Ruby version is shown unwantedly? A simple workaround might be to install [rvm](https://rvm.io/).
 * Does `tmux` look weird? Make sure that tmux version is [2.3](etc/ubuntu-setup.sh) or higher.
-* If you are using neovim, make sure that the [`neovim`](https://pypi.python.org/pypi/neovim/) pypi package is installed on [**local** python 3](https://github.com/{link_to_repo}/dotfiles/blob/master/nvim/init.vim);
+* If you are using neovim, make sure that the [`neovim`](https://pypi.python.org/pypi/neovim/) pypi package is installed on [**local** python 3](https://github.com/<<:REPO_ADDR>>/dotfiles/blob/master/nvim/init.vim);
   e.g. `/usr/local/bin/pip3 install neovim` where the path to `pip` depends on your system.

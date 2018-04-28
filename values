@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export $USER_NAME='skaro94'
+export $REPO_ADDR='\{link_to_repo\}'
