@@ -26,116 +26,7 @@ args = parser.parse_args()
 # Task Definition
 # (path of target symlink) : (location of source file in the repository)
 
-tasks = {
-    # SHELLS
-    '~/.bashrc' : 'bashrc',
-    '~/.screenrc' : 'screenrc',
 
-    # VIM
-    '~/.vimrc' : 'vim/vimrc',
-    '~/.vim' : 'vim',
-    '~/.vim/autoload/plug.vim' : 'vim/bundle/vim-plug/plug.vim',
-
-    # NeoVIM
-    '~/.config/nvim' : 'nvim',
-
-    # GIT
-    '~/.gitconfig' : 'git/gitconfig',
-    '~/.gitignore' : 'git/gitignore',
-
-    # ZSH
-    '~/.zgen'     : 'zsh/zgen',
-    '~/.zsh'      : 'zsh',
-    '~/.zlogin'   : 'zsh/zlogin',
-    '~/.zlogout'  : 'zsh/zlogout',
-    '~/.zpreztorc': 'zsh/zpreztorc',
-    '~/.zprofile' : 'zsh/zprofile',
-    '~/.zshenv'   : 'zsh/zshenv',
-    '~/.zshrc'    : 'zsh/zshrc',
-
-    # Bins
-    '~/.local/bin/dotfiles' : 'bin/dotfiles',
-    '~/.local/bin/fasd' : 'zsh/fasd/fasd',
-    '~/.local/bin/is_mosh' : 'zsh/is_mosh/is_mosh',
-    '~/.local/bin/imgcat' : 'bin/imgcat',
-    '~/.local/bin/imgls' : 'bin/imgls',
-    '~/.local/bin/fzf' : '~/.fzf/bin/fzf', # fzf is at $HOME/.fzf
-
-    # X
-    '~/.Xmodmap' : 'Xmodmap',
-
-    # GTK
-    '~/.gtkrc-2.0' : 'gtkrc-2.0',
-
-    # tmux
-    '~/.tmux'     : 'tmux',
-    '~/.tmux.conf' : 'tmux/tmux.conf',
-
-    # .config
-    '~/.config/terminator' : 'config/terminator',
-    '~/.config/pudb/pudb.cfg' : 'config/pudb/pudb.cfg',
-
-    # pip and python
-    #'~/.pip/pip.conf' : 'pip/pip.conf',
-    '~/.pythonrc.py' : 'python/pythonrc.py',
-    '~/.pylintrc' : 'python/pylintrc',
-    '~/.condarc' : 'python/condarc',
-    '~/.config/pycodestyle' : 'python/pycodestyle',
-}
-
-post_actions = [
-    # zgen installation
-    '''# Update zgen modules and cache (the init file)
-    zsh -c "
-        source ${HOME}/.zshrc                   # source zplug and list plugins
-        zgen reset
-        zgen update
-    "
-    '''
-
-    # validate neovim package installation
-    '''# neovim package needs to be installed
-    if which nvim 2>/dev/null; then
-        /usr/local/bin/python3 -c 'import neovim' || /usr/bin/python3 -c 'import neovim'
-        rc=$?; if [[ $rc != 0 ]]; then
-        echo -e '\033[0;33mNeovim requires 'neovim' package on the system python3. Please try:'
-            echo -e '   /usr/local/bin/pip3 install neovim'
-            echo -e '\033[0m'
-        fi
-    fi
-    ''',
-
-    # Run vim-plug installation
-    {'install' : 'vim +PlugInstall +qall',
-     'update'  : 'vim +PlugUpdate +qall',
-     'none'    : ''}[args.vim_plug],
-
-    # Install tmux plugins via tpm
-    '~/.tmux/plugins/tpm/bin/install_plugins',
-
-    # Change default shell if possible
-    r'''# Change default shell to zsh
-    if [[ ! "$SHELL" = *zsh ]]; then
-        echo -e '\033[0;33mPlease type your password if you wish to change the default shell to ZSH\e[m'
-        chsh -s /bin/zsh && echo -e 'Successfully changed the default shell, please re-login'
-    fi
-    ''',
-
-    # Create ~/.gitconfig.secret file and check user configuration
-    r'''# Create ~/.gitconfig.secret and user configuration
-    if [ ! -f ~/.gitconfig.secret ]; then
-        cat > ~/.gitconfig.secret <<EOL
-# vim: set ft=gitconfig:
-EOL
-    fi
-    if ! git config --file ~/.gitconfig.secret user.name 2>&1 > /dev/null; then echo -ne '
-    \033[1;33m[!] Please configure git user name and email:
-        git config --file ~/.gitconfig.secret user.name "(YOUR NAME)"
-        git config --file ~/.gitconfig.secret user.email "(YOUR EMAIL)"
-\033[0m'
-    fi
-    ''',
-]
 
 ################# END OF FIXME #################
 
@@ -158,10 +49,63 @@ from signal import signal, SIGPIPE, SIG_DFL
 from optparse import OptionParser
 from sys import stderr
 
+from config import *
+
+
 def log(msg, cr=True):
     stderr.write(msg)
     if cr:
         stderr.write('\n')
+
+
+def check_not_exist(source):
+    # bad entry if source does not exists...
+    if not os.path.lexists(source):
+        log(RED("source %s : does not exist" % source))
+        return True
+    return False
+
+
+def check_machine_type():
+    assert(default_type in machine_type)
+    log(YELLOW("what is your machine type? "  + "(" +
+        "".join(["{}({})/".format(k, machine_type(k)) for k in machine_type.keys()])[:-1]
+        + ")")
+    mtype = raw_input().lower()
+    if not (mtype in machine_type):
+        log(RED("Invalid option ({}), falling back to {}".format(mtype,
+            machine_type(default_type))))
+        mtype = default_type
+
+    return machine_type(mtype)
+
+
+# ~/(task) -> ~/(task)/(mtype) if is_dir
+def get_machine_specific_opts(mtype, tasks):
+    keys = tasks.keys()
+    for task_dir in keys:
+        source = os.path.join(current_dir, os.path.expanduser(task_dir))
+
+        if check_not_exist(source):
+            continue
+
+        if os.path.isdir(source):
+            filename = mtype
+            new_source = os.path.join(source, filename)
+            if check_not_exist(new_source):
+                for (_, _, a_filename) in os.walk(source):
+                    filename = a_filename
+                    new_source = os.path.join(source, filename)
+                    log(RED("Falling back to {}".format(filename)
+                    break
+
+        new_task_dir = task_dir + '/' + filename
+
+        dest = tasks[task_dir]
+        del tasks[task_dir]
+        tasks[new_task_dir] = dest
+
+    return tasks
 
 
 # get current directory (absolute path)
@@ -187,8 +131,6 @@ if submodule_issues:
     if shall_we:
         git_submodule_update_cmd = 'git submodule update --init --recursive'
         # git 2.8+ supports parallel submodule fetching
-        try:
-            git_version = str(subprocess.check_output("""git --version | awk '{print $3}'""", shell=True))
             if git_version >= '2.8': git_submodule_update_cmd += ' --jobs 8'
         except Exception as e:
             pass
@@ -198,20 +140,20 @@ if submodule_issues:
         log(RED("Aborted."))
         sys.exit(1)
 
+mtype = check_machine_type()
+tasks = get_machine_specific_opt(mtype, tasks)
 
 for target, source in sorted(tasks.items()):
     # normalize paths
     source = os.path.join(current_dir, os.path.expanduser(source))
     target = os.path.expanduser(target)
 
-    # bad entry if source does not exists...
-    if not os.path.lexists(source):
-        log(RED("source %s : does not exist" % source))
-        continue
-
     # if --force option is given, delete and override the previous symlink
     if os.path.lexists(target):
         is_broken_link = os.path.islink(target) and not os.path.exists(os.readlink(target))
+
+        if check_not_exist(source):
+            continue
 
         if args.force or is_broken_link:
             if os.path.islink(target):
