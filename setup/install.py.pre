@@ -26,6 +26,9 @@ args = parser.parse_args()
 
 # Task Definition
 # (path of target symlink) : (location of source file in the repository)
+
+from config import *
+
 tasks = get_tasks(args)
 post_actions = get_post_actions(args)
 
@@ -71,7 +74,7 @@ def check_not_exist(source):
 def check_machine_type():
     assert(default_type in machine_type)
     log(YELLOW("what is your machine type? "  + "(" +
-        "".join(["{}({})/".format(k, machine_type(k)) for k in machine_type.keys()])[:-1]
+        "".join(["{}({})/".format(k, machine_type[k]) for k in machine_type.keys()])[:-1]
         + ")"))
     mtype = raw_input().lower()
     if not (mtype in machine_type):
@@ -79,33 +82,31 @@ def check_machine_type():
             machine_type(default_type))))
         mtype = default_type
 
-    return machine_type(mtype)
+    return machine_type[mtype]
 
 
 # ~/(task) -> ~/(task)/(mtype) if is_dir
 def get_machine_specific_opts(mtype, tasks):
-    keys = tasks.keys()
-    for task_dir in keys:
+    for target, task_dir in sorted(tasks.items()):
         source = os.path.join(current_dir, os.path.expanduser(task_dir))
 
-        if check_not_exist(source):
+        if not check_not_exist(source):
             continue
 
+        chosen_file = ''
         if os.path.isdir(source):
-            filename = mtype
-            new_source = os.path.join(source, filename)
+            new_source = os.path.join(source, mtype)
+            chosen_file = mtype
             if check_not_exist(new_source):
-                for (_, _, a_filename) in os.walk(source):
-                    filename = a_filename
+                for (_, _, filename) in os.walk(source):
                     new_source = os.path.join(source, filename)
-                    log(RED("Falling back to {}".format(filename)
+                    log(RED("Falling back to {}".format(filename)))
+                    chosen_file = filename
                     break
 
-        new_task_dir = task_dir + '/' + filename
+        new_task_dir = task_dir + '/' + chosen_file
 
-        dest = tasks[task_dir]
-        del tasks[task_dir]
-        tasks[new_task_dir] = dest
+        tasks[target] = new_task_dir
 
     return tasks
 
@@ -133,6 +134,8 @@ if submodule_issues:
     if shall_we:
         git_submodule_update_cmd = 'git submodule update --init --recursive'
         # git 2.8+ supports parallel submodule fetching
+        try:
+            git_version = str(subprocess.check_output("""git --version | awk '{print $3}'""", shell=True))
             if git_version >= '2.8': git_submodule_update_cmd += ' --jobs 8'
         except Exception as e:
             pass
@@ -143,7 +146,7 @@ if submodule_issues:
         sys.exit(1)
 
 mtype = check_machine_type()
-tasks = get_machine_specific_opt(mtype, tasks)
+tasks = get_machine_specific_opts(mtype, tasks)
 
 for target, source in sorted(tasks.items()):
     # normalize paths

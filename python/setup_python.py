@@ -6,10 +6,13 @@ from signal import signal, SIGPIPE, SIG_DFL
 
 
 def setup(mtype, current_dir):
+    python_config_path = current_dir + '/python'
+
     python_versions = ['3.6.5', '2.7.14', 'pypy3.5-5.10.0']
     package_list = ['virtualenv', 'virtualenvwrapper']
     pyenv_dict = {
         'pyenv_install': ['curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash'],
+        'pyenv_init' : ['bash {}/pyenv_setup.sh'.format(python_config_path)],
         'pyenv_python': ['pyenv install ' + version for version in python_versions],
         'pyenv_global': ['pyenv global ' + python_versions[0]]
     }
@@ -44,5 +47,10 @@ def setup(mtype, current_dir):
 
     run_dict(pipsi_dict)
 
-    if os.path.lexists(requirements):
+    exists_req = os.path.lexists(requirements)
+    current_path = os.getcwd()
+    os.chdir(os.path.expanduser('~'))
+    subprocess.call(['pipenv', 'shell'])
+    if exists_req:
         subprocess.call(['pipenv', 'install', '-r', requirements])
+    os.chdir(current_path)

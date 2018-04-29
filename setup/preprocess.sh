@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # preprocess: fill up values in .pre files
-VALUE_FILE=$HOME
-VALUE_FILE+="/.dotfiles/values"
+DOTFILE=$HOME"/.dotfiles"
+VALUE_FILE=$DOTFILE"/values"
 
 declare -a VALS
 COUNT=0
@@ -21,7 +21,7 @@ while read LINE; do
     fi
 done < $VALUE_FILE
 
-PRE_FILE_LIST=$(find . -name "*.pre")
+PRE_FILE_LIST=$(find .. -name "*.pre")
 
 for FILE_NAME in $PRE_FILE_LIST; do
     NEW_NAME=${FILE_NAME:0:-4}
@@ -33,4 +33,3 @@ for FILE_NAME in $PRE_FILE_LIST; do
     SED=${SED:0:-2}
     sed "$SED" $FILE_NAME > $NEW_NAME
 done
-
