@@ -72,7 +72,7 @@ def check_machine_type():
     assert(default_type in machine_type)
     log(YELLOW("what is your machine type? "  + "(" +
         "".join(["{}({})/".format(k, machine_type(k)) for k in machine_type.keys()])[:-1]
-        + ")")
+        + ")"))
     mtype = raw_input().lower()
     if not (mtype in machine_type):
         log(RED("Invalid option ({}), falling back to {}".format(mtype,

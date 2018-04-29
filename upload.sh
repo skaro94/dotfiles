@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # preprocess: fill up values in .pre files
-bin/bash preprocess.sh
+bash preprocess.sh
 
 # git push
 git add .
