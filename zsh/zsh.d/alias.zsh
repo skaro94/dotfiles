@@ -123,6 +123,10 @@ alias nt='NOSE_REDNOSE=1 nosetests -v'
 alias pytest='pytest -vv'
 alias green='green -vv'
 
+# pretty print json
+alias prettyjson='python -m json.tool | pygmentize -l json'
+alias jpt='prettyjson'
+
 # }}}
 
 
@@ -142,6 +146,7 @@ alias awklast="awk '{print \$\(NF\)}'"
 # Codes ===================================== {{{
 
 alias prettyxml='xmllint --format - | pygmentize -l xml'
+alias xpt='prettyxml'
 
 if (( $+commands[cdiff] )); then
     # cdiff, side-by-side with full width
@@ -202,5 +207,10 @@ function usegpu {
     export CUDA_VISIBLE_DEVICES=$gpu_id
 }
 
+# upload dotfile to github
+alias upload="zsh $HOME/.dotfiles/upload.sh"
+
+# laziness
+alias rmf="rm -f"
 
 # }}}

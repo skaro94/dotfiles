@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# preprocess: fill up values in .pre files
 VALUE_FILE=$HOME
 VALUE_FILE+="/.dotfiles/values"
 
@@ -30,5 +31,11 @@ for FILE_NAME in $PRE_FILE_LIST; do
         SED+="s/<<:${VAL[0]}>>/${VAL[1]}/g; "
     done
     SED=${SED:0:-2}
+    echo $SED
     sed "$SED" $FILE_NAME > $NEW_NAME
 done
+
+# git push
+git add .
+git commit -m "$1"
+git push origin master

@@ -4,6 +4,7 @@
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #   Jongwook Choi <wookayin@gmail.com>
+#   Jiwan Chung <fernwehtilldawn@gmail.com>
 #
 
 #
@@ -106,3 +107,13 @@ export PYTHONSTARTUP=$HOME/.pythonrc.py
 
 # Disable dot files in archive
 export COPYFILE_DISABLE=true
+
+# set cuda path for spacy
+CUDA_FILE="/usr/local/cuda"
+
+if [ -L "$FILE" ] || [ -f "$FILE" ]; then
+    export CUDA_HOME=/usr/local/cuda
+    export PATH=$PATH:$CUDA_HOME/bin
+else
+    echo "cuda not found!"
+fi
