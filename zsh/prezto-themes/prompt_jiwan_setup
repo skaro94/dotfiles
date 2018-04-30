@@ -3,11 +3,12 @@
 # Inspired and based on Sorin's zsh prompt theme.
 #
 # Authors:
-#   Jongwook Choi <wookayin@gmail.com>
+#   Jiwan Chung <fernwehtilldawn@gmail.com>
+#   Jongwook Choi <jiwanayin@gmail.com>
 #   Sorin Ionescu <sorin.ionescu@gmaiolcom>
 
 
-function prompt_wook_precmd {
+function prompt_jiwan_precmd {
   # A pre-command prompt hook function.
 
   setopt LOCAL_OPTIONS
@@ -47,7 +48,7 @@ function prompt_wook_precmd {
   fi
 }
 
-function prompt_wook_setup {
+function prompt_jiwan_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)
@@ -56,7 +57,7 @@ function prompt_wook_setup {
   autoload -Uz add-zsh-hook
 
   # Add hook that is executed before each command.
-  add-zsh-hook precmd prompt_wook_precmd
+  add-zsh-hook precmd prompt_jiwan_precmd
 
   # editor (vi-mode, etc ...)
   zstyle ':prezto:module:editor:info:keymap:primary' format '%B%F{red}❯%F{yellow}❯%(?.%F{green}.%F{red})❯%f%b'
@@ -86,9 +87,8 @@ function prompt_wook_setup {
   # Ruby - RVM
   #zstyle ':prezto:module:ruby:info:version' format ' %F{magenta}%v%f'
 
-  # Python virtualenv
+  # Python
   zstyle ':prezto:module:python:info:virtualenv' format ' %F{cyan}%v%f'
-  # python version
   zstyle ':prezto:module:python:info:version' format ' %F{cyan}%v%f'
 
   # Node nvm
@@ -102,15 +102,17 @@ function prompt_wook_setup {
 
   # Define prompts.
   PROMPT='\
-%B%F{green}\
+%B%F{green}[\
 %B%F{yellow}%n\
 %B%F{green}@\
 %B%F{${PROMPT_HOST_COLOR}}%m\
 %B%F{green}: \
 %B%F{red}${PWD}%f%b\
 ${git_info:+${(e)git_info[prompt]}}\
-%B%F{green}\
-${python_info[virtualenv]}${python_info[version]}\
+%B%F{green}]\
+${python_info[virtualenv]}\
+${python_info[version]}\
+WTF\
 ${cuda_info}\
 ${node_info[version]}\
 
@@ -123,6 +125,6 @@ ${editor_info[keymap]} \
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 }
 
-prompt_wook_setup "$@"
+prompt_jiwan_setup "$@"
 
 # vim: set ft=zsh:
