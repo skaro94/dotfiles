@@ -8,17 +8,23 @@
 "  (or /usr/bin/pip3, /usr/local/bin/pip, depending environments)
 " The locally installed python (e.g. homebrew) at /usr/local/bin precedes.
 
-let g:python_host_prog  = '/usr/local/bin/python'
-if empty(glob(g:python_host_prog))
-    " Fallback if not exists
-    let g:python_host_prog = '/usr/bin/python'
-endif
+function Fallback_Python(prog, path)
+    if empty(glob(a:prog))
+        " Fallback if not exists
+        return '/usr/bin/python'
+    else
+        return a:path
+    endif
+endfunction
 
-let g:python3_host_prog = '/usr/local/bin/python3'
-if empty(glob(g:python3_host_prog))
-    " Fallback if not exists
-    let g:python3_host_prog = '/usr/bin/python3'
-endif
+let g:python_host_prog = '/usr/local/bin/nvim/python'
+let g:python_host_prog = Fallback_Python(g:python_host_prog, '/usr/local/bin/python')
+let g:python_host_prog = Fallback_Python(g:python_host_prog, '/usr/bin/python')
+
+let g:python3_host_prog = '/usr/local/bin/nvim/python3'
+let g:python3_host_prog = Fallback_Python(g:python3_host_prog, '/usr/local/bin/python3')
+let g:python3_host_prog = Fallback_Python(g:python3_host_prog, '/usr/bin/python3')
+
 if empty(glob(g:python3_host_prog)) && executable("python3")
     " Fallback to local/venv python3 if not exists
     let g:python3_host_prog = substitute(system("which python3"), '\n\+$', '', '')

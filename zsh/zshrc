@@ -84,3 +84,7 @@ fi
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# local gem path
+GEM_PATHS=$(gem environment gempath)
+PATH=$PATH:GEM_PATHS

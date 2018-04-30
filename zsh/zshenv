@@ -114,6 +114,4 @@ CUDA_FILE="/usr/local/cuda"
 if [ -L "$FILE" ] || [ -f "$FILE" ]; then
     export CUDA_HOME=/usr/local/cuda
     export PATH=$PATH:$CUDA_HOME/bin
-else
-    echo "cuda not found!"
 fi

@@ -1,72 +1,86 @@
 machine_type = {
-        'p': 'personal',
-        's': 'server'
+    'p': 'personal',
+    's': 'server'
 }
 default_type = 'p'
 
+sep_suffix = '.mtype'
+contained_nvim = False
 
-def get_tasks(args):
+
+def get_tasks():
     tasks = {
         # SHELLS
-        '~/.bashrc' : 'bashrc',
-        '~/.screenrc' : 'screenrc',
+        '~/.bashrc': 'bashrc',
+        '~/.screenrc': 'screenrc',
 
         # VIM
-        '~/.vimrc' : 'vim/vimrc',
-        '~/.vim' : 'vim',
-        '~/.vim/autoload/plug.vim' : 'vim/bundle/vim-plug/plug.vim',
+        '~/.vimrc': 'vim/vimrc',
+        '~/.vim': 'vim',
+        '~/.vim/autoload/plug.vim': 'vim/bundle/vim-plug/plug.vim',
 
         # NeoVIM
-        '~/.config/nvim' : 'nvim',
+        '~/.config/nvim': 'nvim',
 
         # GIT
-        '~/.gitconfig' : 'git/gitconfig',
-        '~/.gitignore' : 'git/gitignore',
+        '~/.gitconfig': 'git/gitconfig',
+        '~/.gitignore': 'git/gitignore',
 
         # ZSH
-        '~/.zgen'     : 'zsh/zgen',
-        '~/.zsh'      : 'zsh',
-        '~/.zlogin'   : 'zsh/zlogin',
-        '~/.zlogout'  : 'zsh/zlogout',
+        '~/.zgen'    : 'zsh/zgen',
+        '~/.zsh'     : 'zsh',
+        '~/.zlogin'  : 'zsh/zlogin',
+        '~/.zlogout' : 'zsh/zlogout',
         '~/.zpreztorc': 'zsh/zpreztorc',
-        '~/.zprofile' : 'zsh/zprofile',
-        '~/.zshenv'   : 'zsh/zshenv',
-        '~/.zshrc'    : 'zsh/zshrc',
+        '~/.zprofile': 'zsh/zprofile',
+        '~/.zshenv'  : 'zsh/zshenv',
+        '~/.zshrc'   : 'zsh/zshrc',
 
         # Bins
-        '~/.local/bin/dotfiles' : 'bin/dotfiles',
-        '~/.local/bin/fasd' : 'zsh/fasd/fasd',
-        '~/.local/bin/is_mosh' : 'zsh/is_mosh/is_mosh',
-        '~/.local/bin/imgcat' : 'bin/imgcat',
-        '~/.local/bin/imgls' : 'bin/imgls',
-        '~/.local/bin/fzf' : '~/.fzf/bin/fzf', # fzf is at $HOME/.fzf
+        '~/.local/bin/dotfiles': 'bin/dotfiles',
+        '~/.local/bin/fasd': 'zsh/fasd/fasd',
+        '~/.local/bin/is_mosh': 'zsh/is_mosh/is_mosh',
+        '~/.local/bin/imgcat': 'bin/imgcat',
+        '~/.local/bin/imgls': 'bin/imgls',
+        '~/.local/bin/fzf': '~/.fzf/bin/fzf',  # fzf is at $HOME/.fzf,
+        '~/.local/bin/nvim': 'bin/nvim',
 
         # X
-        '~/.Xmodmap' : 'Xmodmap',
+        '~/.Xmodmap': 'Xmodmap',
 
         # GTK
-        '~/.gtkrc-2.0' : 'gtkrc-2.0',
+        '~/.gtkrc-2.0': 'gtkrc-2.0',
 
         # tmux
-        '~/.tmux'     : 'tmux',
-        '~/.tmux.conf' : 'tmux/tmux.conf',
+        '~/.tmux'    : 'tmux',
+        '~/.tmux.conf': 'tmux/tmux.conf',
 
         # .config
-        '~/.config/terminator' : 'config/terminator',
-        '~/.config/pudb/pudb.cfg' : 'config/pudb/pudb.cfg',
+        '~/.config/terminator': 'config/terminator',
+        '~/.config/pudb/pudb.cfg': 'config/pudb/pudb.cfg',
 
         # pip and python
-        #'~/.pip/pip.conf' : 'pip/pip.conf',
-        '~/.pythonrc.py' : 'python/pythonrc.py',
-        '~/.pylintrc' : 'python/pylintrc',
-        '~/.condarc' : 'python/condarc',
-        '~/.config/pycodestyle' : 'python/pycodestyle',
+        #'~/.pip/pip.conf': 'pip/pip.conf',
+        '~/.pythonrc.py': 'python/pythonrc.py',
+        '~/.pylintrc': 'python/pylintrc',
+        '~/.condarc': 'python/condarc',
+        '~/.config/pycodestyle': 'python/pycodestyle',
     }
     return tasks
+
+def get_symlinks():
+    links = {
+        '~/.local/bin/nvim/python': '/usr/bin/python',
+        '~/.local/bin/nvim/python3': '/usr/bin/python3'
+    }
+    return links
 
 
 def get_post_actions(args):
     post_actions = [
+        # source deactivate
+        'source deactivate',
+
         # zgen installation
         r'''# Update zgen modules and cache (the init file)
         zsh -c "
@@ -88,10 +102,7 @@ def get_post_actions(args):
         fi
         ''',
 
-        # Run vim-plug installation
-        {'install' : 'vim +PlugInstall +qall',
-        'update'  : 'vim +PlugUpdate +qall',
-        'none'    : ''}[args.vim_plug],
+
 
         # Install tmux plugins via tpm
         '~/.tmux/plugins/tpm/bin/install_plugins',
@@ -118,5 +129,9 @@ def get_post_actions(args):
             \033[0m'
         fi
         ''',
+
+        # vim ruby integration
+        'gem install --user-install neovim',
+        'gem install --user-install tmuxinator',
     ]
     return post_actions

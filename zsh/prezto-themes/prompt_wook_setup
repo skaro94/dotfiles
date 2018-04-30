@@ -108,7 +108,7 @@ function prompt_wook_setup {
 %B%F{red}${PWD}%f%b\
 ${git_info:+${(e)git_info[prompt]}}\
 %B%F{green}]\
-${python_info[virtualenv]}\
+${python_info[virtualenv]:python_info[version]}\
 ${cuda_info}\
 ${node_info[version]}\
 
