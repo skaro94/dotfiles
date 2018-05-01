@@ -216,5 +216,6 @@ alias upload="zsh $HOME/.dotfiles/upload.sh"
 
 # laziness
 alias rmf="rm -f"
+alias wh="ssh warhol"
 
 # }}}

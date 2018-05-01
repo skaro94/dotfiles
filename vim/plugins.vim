@@ -92,6 +92,10 @@ Plug 'rdolgushin/groovy.vim'
 
 Plug 'Shougo/echodoc.vim'
 
+" language server client
+Plug 'natebosch/vim-lsc'
+" dartlang support
+Plug 'dart-lang/dart-vim-plugin'
 
 if has('nvim')
     function! DoRemote(arg)
