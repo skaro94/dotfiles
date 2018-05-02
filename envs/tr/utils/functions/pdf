@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function pdf_init() {
+    w3m $HTML_FILE -num -F
+}
+
+# usage: pdf_open_page PAGEID
+function pdf_open_page() {
+    pid=$1
+
+    tmux send-keys -t $PDF_PANE 'U' "#pid_$pid" Enter
+    tmux send-keys -t $PDF_PANE 'j'  # refresh
+}
+
+# usage: pdf_search KEY
+function pdf_search() {
+    key=$1
+    tmux send-keys -t $PDF_PANE '/' $2 Enter
+}
+
+function pdf_next() {
+    tmux send-keys -t $PDF_PANE 'n'
+}
+
+function pdf_before() {
+    tmux send-keys -t $PDF_PANE 'N'
+}
+
+function pdf_scroll_down() {
+    tmux send-keys -t $PDF_PANE "30" 'J'
+}
+
+function pdf_scroll_up() {
+    tmux send-keys -t $PDF_PANE "30" 'K'
+}
+
+# usage: pdf_center_line LINE_NUM
+function pdf_center_line() {
+    line=$1
+
+    tmux send-keys -t $PDF_PANE "$line""g"
+}
+
+function pdf_refresh() {
+    tmux send-keys -t $PDF_PANE 'j'  # center
+}

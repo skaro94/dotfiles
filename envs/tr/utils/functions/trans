@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function trans_init() {
+    trans -brief en:ko -I
+}
+
+# usage: trans_search KEY
+function trans_search() {
+    key=$1
+
+    export PREV_TRANS_KEY=$key
+    tmux send-keys -t $TRANS_PANE "$key" Enter
+}
+
+# usage: trans_trans (after running trans_search)
+function trans_apply() {
+    trans -brief en:ko $PREV_TRANS_KEY
+}
