@@ -1,0 +1,12 @@
+#!/bin/bash
+
+USER=$1
+SERVER=$2
+PORT=$3
+FILENAME=${SERVER%%.*}
+if [ -n "$PORT" ]; then
+    PORT_FLAG="-p "
+fi
+
+yes "y" | ssh-keygen -t rsa -N "" -f "$HOME/.ssh/$FILENAME" -q
+ssh-copy-id -f -i $HOME/.ssh/$FILENAME.pub $USER@$SERVER $PORT_FLAG$PORT

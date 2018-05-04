@@ -88,3 +88,9 @@ fi
 # local gem path
 GEM_PATHS=$(gem environment gempath)
 PATH=$PATH:GEM_PATHS
+
+# flutter path
+PATH=$PATH:$HOME/dart/flutter/bin
+# android SDK tools
+ANDROID_HOME=$HOME/dart/android_sdk
+PATH="${PATH}:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools"

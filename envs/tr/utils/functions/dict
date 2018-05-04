@@ -1,0 +1,16 @@
+#!/bin/bash
+
+function dict_init() {
+    trans -verbose en:ko -I
+}
+
+function dict_search() {
+    key=$1
+
+    export PREV_DICT_KEY=$key
+    tmux send-keys -t $DICT_PANE "$key" Enter
+}
+
+function dict_trans() {
+    trans -verbose en:ko $PREV_DICT_KEY
+}

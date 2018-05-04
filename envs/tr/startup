@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#execute from top folder
+source ./env/.zsh
+
+if [ -z ${TR_INITED} ]; then
+    # do some work
+    bash ./env/utils/prepro.sh
+    TR_INITED=True
+fi
+
+cd env
+tmuxinator local

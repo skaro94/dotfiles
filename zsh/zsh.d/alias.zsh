@@ -46,6 +46,11 @@ alias tmuxa='tmux -2 attach-session -d -t'
 # tmux kill-session -t
 alias tmuxkill='tmux kill-session -t'
 
+# tmuxinator
+alias mux='tmuxinator'
+alias tmo='tmuxinator open'
+alias tms='tmuxinator start'
+
 # I am lazy, yeah
 alias t='tmuxa'
 alias T='TMUX= tmuxa'

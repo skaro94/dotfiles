@@ -54,6 +54,8 @@ def get_tasks():
         # tmux
         '~/.tmux'    : 'tmux',
         '~/.tmux.conf': 'tmux/tmux.conf',
+        '~/.config/tmuxinator': 'tmux/tmuxinator',
+        '~/.tmuxinator': 'tmux/tmuxinator',
 
         # .config
         '~/.config/terminator': 'config/terminator',
