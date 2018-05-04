@@ -212,5 +212,8 @@ alias upload="zsh $HOME/.dotfiles/upload.sh"
 
 # laziness
 alias rmf="rm -f"
+alias wh="ssh warhol"
+alias jup="~/.local/bin/utils/jupyter.sh"
+alias teb="~/.local/bin/utils/tensorboard.sh"
 
 # }}}
