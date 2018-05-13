@@ -5,7 +5,7 @@ function pdf_init() {
 }
 
 # usage: pdf_open_page PAGEID
-function pdf_open_page() {
+function pdf_open_page() { #1
     pid=$1
 
     tmux send-keys -t $PDF_PANE 'U' "#pid_$pid" Enter
@@ -13,7 +13,7 @@ function pdf_open_page() {
 }
 
 # usage: pdf_search KEY
-function pdf_search() {
+function pdf_search() { #1
     key=$1
     tmux send-keys -t $PDF_PANE '/' $2 Enter
 }
@@ -35,7 +35,7 @@ function pdf_scroll_up() {
 }
 
 # usage: pdf_center_line LINE_NUM
-function pdf_center_line() {
+function pdf_center_line() { #1
     line=$1
 
     tmux send-keys -t $PDF_PANE "$line""g"

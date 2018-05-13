@@ -1,0 +1,1 @@
+/home/jiwan/Dropbox/tr/envs/.vim/bindings.vim

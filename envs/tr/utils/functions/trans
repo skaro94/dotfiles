@@ -5,7 +5,7 @@ function trans_init() {
 }
 
 # usage: trans_search KEY
-function trans_search() {
+function trans_search() { #1
     key=$1
 
     export PREV_TRANS_KEY=$key

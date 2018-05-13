@@ -5,34 +5,34 @@ function term_init() {
 }
 
 # usage: term_search KEY
-function term_search() {
+function term_search() { #1
     key=$1
 
     export PREV_TERM_KEY=$key
     tmux send-keys -t $TERM_PANE "search " "$key" Enter
 }
 
-function term_insert() {
+function term_insert() { #12
     key=$1
     val=$2
 
     tmux send-keys -t $TERM_PANE "insert " "$key" " $val" Enter
 }
 
-function term_update() {
+function term_update() { #12
     key=$1
     val=$2
 
     tmux send-keys -t $TERM_PANE "update " "$key" " $val" Enter
 }
 
-function term_remove() {
+function term_remove() { #1
     key=$1
 
     tmux send-keys -t $TERM_PANE "remove " "$key" Enter
 }
 
-function term_append() {
+function term_append() { #12
     key=$1
     val=$2
 

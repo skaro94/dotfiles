@@ -94,3 +94,10 @@ PATH=$PATH:$HOME/dart/flutter/bin
 # android SDK tools
 ANDROID_HOME=$HOME/dart/android_sdk
 PATH="${PATH}:${ANDROID_HOME}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools"
+
+source ~/.zsh/paths
+
+# non interactive shell alias
+setopt aliases
+
+alias lu='ls ~'

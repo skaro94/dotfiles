@@ -4,7 +4,7 @@ function dict_init() {
     trans -verbose en:ko -I
 }
 
-function dict_search() {
+function dict_search() { #1
     key=$1
 
     export PREV_DICT_KEY=$key

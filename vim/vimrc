@@ -25,8 +25,9 @@ endif
 syntax on
 set nocompatible
 
+" load shell in the same env as user
 if filereadable('/bin/zsh')
-  set shell=/bin/zsh
+  set shell=/bin/zsh\ -i
 endif
 
 " use path '~/.vim' even on non-unix machine
@@ -1167,6 +1168,13 @@ if filereadable(expand("\~/.vimrc.local"))
     source \~/.vimrc.local
 endif
 
+" reload vimrc
+nnoremap rl :source $MYVIMRC<CR>
+
+" personal plugins
+for f in split(glob('~/.vim/plugin/*.vim'), '\n')
+    exe 'source' f
+endfor
 " }}}
 
 " vim: set ts=2 sts=2 sw=2:

@@ -1,7 +1,7 @@
 # ~/.tmuxinator/tr.yml
 
 name: tr
-root: ~/
+root: ~/Dropbox/tr
 
 # Optional tmux socket
 # socket_name: foo
@@ -23,7 +23,7 @@ on_project_exit: term_save
 # on_project_stop: command
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
-pre_window: source env/.zsh
+pre_window: source envs/.zsh
 
 # Pass command line options to tmux. Useful for specifying a different tmux.conf.
 # tmux_options: -f ~/.tmux.mac.conf
@@ -51,7 +51,6 @@ windows:
       # synchronize: after
       panes:
         - pdf:
-          - source env/.zsh
           - pdf_init
         - dict: dict_init
         - trans: trans_init
